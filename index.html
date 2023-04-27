@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script>
+        
+        function foo() {
+  const paisa = document.getElementById('input1').value;
+  const discrpt = document.getElementById('input2').value;
+  let categories = document.getElementById('input3').value;
+
+  let amount = {
+    'total_paisa': paisa,
+    'discrption': discrpt,
+    'cat': categories
+  };
+
+  localStorage.setItem(categories, JSON.stringify(amount));
+  displayExpenses();
+}
+
+function displayExpenses() {
+  const expensesDiv = document.getElementById('expenses');
+  expensesDiv.innerHTML = ''; // clear the existing content
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const data = JSON.parse(localStorage.getItem(key));
+
+    let newdiv = document.createElement('div');
+    let newli = document.createElement('li');
+    let delete_btn = document.createElement('button');
+    let edit_btn = document.createElement('button');
+
+    edit_btn.type = 'submit';
+    edit_btn.textContent = 'edit';
+    edit_btn.onclick = ll;
+
+    delete_btn.onclick = ss;
+    delete_btn.type = 'submit';
+    delete_btn.textContent = 'delete';
+
+    newli.innerHTML = `${data.total_paisa}-${data.cat}-${data.discrption}`;
+
+    newli.appendChild(delete_btn);
+    newli.appendChild(edit_btn);
+
+    newdiv.appendChild(newli);
+    expensesDiv.appendChild(newdiv);
+  }
+}
+
+
+
+
+
+function ss(e) {
+  e.preventDefault();
+  let item = e.target.parentElement;
+  console.log(item);
+  let newobj = item.cloneNode(true);
+  newobj.removeChild(newobj.lastChild);
+  newobj.removeChild(newobj.lastChild);
+  let dl = JSON.parse(newobj.textContent);
+ 
+  item.remove();
+  localStorage.removeItem(dl.cat);
+}
+
+
+function ll(e)
+{
+    e.preventDefault()
+    let item=e.target.parentElement
+    let newobj = item.cloneNode(true); // clone the li element to remove the delete button
+    newobj.removeChild(newobj.lastChild)
+    newobj.removeChild(newobj.lastChild)
+    let dl=JSON.parse(newobj.textContent)
+    console.log(dl);
+
+    const lname=document.getElementById('input1')
+    const lemail=document.getElementById('input2')
+    const lphone=document.getElementById('input3')
+
+    lname.value=dl.name
+    lemail.value=dl.email
+    lphone.value=dl.phone
+    item.remove()
+    localStorage.removeItem(categories)
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    form.addEventListener('submit', foo);
+    displayExpenses();
+});
+    </script>
+</head>
+
+  <body>
+    <form>
+        <div class="row">
+          <div class="col">
+            <label for="input1">choose expense amount</label>
+            <input type="number" class="form-control" id="input1">
+          </div>
+          <div class="col">
+            <label for="input2">choose a discription</label>
+            <input type="text" class="form-control" id="input2">
+          </div>
+          <div class="col">
+            <label for="input3">choose a categories</label>
+            <select class="form-select" id="input3">
+                <option selected>Select an option</option>
+                <option value="movie">movie</option>
+                <option value="sutta">sutta</option>
+                <option value="monk">old monk</option>
+              </select>
+          </div>
+          <div class="col">
+            <button type="button" class="form-control my-4" id='btn123' onclick="foo()">add expense</button>
+
+          </div>
+        </div>
+      </form>
+      <div id="expenses"></div>
+      
+      
+      
+      
+    
+  </body>
+</html>
